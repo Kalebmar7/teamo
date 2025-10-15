@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>¿Me amas? 💖</title>
+<style>
+  body {
+    background: linear-gradient(135deg, #ffb6c1, #ff69b4);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Comic Sans MS', sans-serif;
+    overflow: hidden;
+    color: #fff;
+    text-align: center;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+  }
+
+  button {
+    background-color: #fff;
+    color: #ff69b4;
+    border: none;
+    border-radius: 30px;
+    padding: 15px 30px;
+    margin: 10px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+  }
+
+  button:hover {
+    transform: scale(1.1);
+  }
+
+  #noBtn {
+    position: absolute;
+  }
+
+  #quiz, #final {
+    display: none;
+  }
+
+  .heart {
+    position: absolute;
+    color: #fff;
+    font-size: 20px;
+    animation: float 4s linear infinite;
+  }
+
+  @keyframes float {
+    0% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(-700px); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+  <h1 id="question">¿Me amas? 💖</h1>
+  <div id="buttons">
+    <button id="yesBtn">Sí 💞</button>
+    <button id="noBtn">No tanto 💔</button>
+  </div>
+
+  <div id="quiz">
+    <h1>💘 Mini Quiz del Amor 💘</h1>
+    <p id="quizQuestion"></p>
+    <div id="quizButtons"></div>
+  </div>
+
+  <div id="final">
+    <h1>Sabía que me amabas 💕</h1>
+    <p>Eres lo mejor que me pasó 💫<br>— De tu novio Kaleb 💞</p>
+  </div>
+
+  <script>
+    const noBtn = document.getElementById("noBtn");
+    const yesBtn = document.getElementById("yesBtn");
+    const buttonsDiv = document.getElementById("buttons");
+    const quizDiv = document.getElementById("quiz");
+    const finalDiv = document.getElementById("final");
+    const quizQuestion = document.getElementById("quizQuestion");
+    const quizButtons = document.getElementById("quizButtons");
+
+    // Hace que el botón "No tanto" se mueva
+    noBtn.addEventListener("mouseover", () => {
+      const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+      const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+      noBtn.style.left = `${x}px`;
+      noBtn.style.top = `${y}px`;
+    });
+
+    yesBtn.addEventListener("click", startQuiz);
+
+    const questions = [
+  { q: "¿Qué te gusta más de mí?", a: ["Mi sonrisa 😁", "Mi sentido del humor 😂", "Todo 😍"] },
+  { q: "¿Cuál fue nuestro mejor momento juntos?", a: ["Trabajando juntos 💐", "Cuando hablamos 🤭", "Cada momento contigo 💞"] },
+  { q: "Si pudieras describirnos en una palabra, sería...", a: ["Amor ❤️", "Magia ✨", "Destino 💫"] },
+
+  // Nuevas preguntas graciosas y románticas
+  { q: "Si fueras un superhéroe, ¿qué poder tendrías para mí?", a: ["Bed time 😁", "Teletransportarnos a la playa 🏖️", "Robar todas mis preocupaciones 💕"] },
+  { q: "¿Quién se enoja más rápido?", a: ["Yo 😅", "Tú 😂", "¡Ninguno, siempre amor! 💖"] },
+  { q: "Si pudiéramos irnos a un lugar ahora mismo, sería...", a: ["A la luna 🌙", "Un picnic romántico 🍓", "A comer pizza 🍕"] },
+  { q: "Si nuestro amor fuera un postre, sería...", a: ["Chocolate 🍫", "Helado 🍦", "Cupcake 🧁"] },
+  { q: "¿Que te gusta mas?", a: ["Mi voz", "Brazos", "Todo, todito"] },
+  { q: "Si te doy un abrazo ahora, ¿cuánto dura?", a: ["1 minuto 💖", "10 minutos 💞", "Toda la vida 😍"] },
+  { q: "¿Cuál es nuestra película perfecta?", a: ["Comedia romántica 😂❤️", "Aventura juntos 🌍", "Cualquier cosa contigo 😘"] },
+
+  // 5 preguntas adicionales
+  { q: "Si nuestro amor tuviera un himno, sería...", a: ["Una balada romántica 🎵", "Una canción de baile 😂💃", "Nuestra risa juntos 😍"] },
+  { q: "Si tuvieras que elegirme un apodo gracioso, sería...", a: ["Mi osito 😘", "Mi travieso 😏", "Mi cupcake 💕"] },
+  { q: "Si fueras un emoji, ¿cuál serías pensando en mí?", a: ["💖", "😂", "🥰"] },
+  { q: "Si pudiéramos vernos ahora, que hariamos?", a: ["comer helado 🍦", "Abrazarnos", "Besarnos 💞"] },
+  { q: "Si mañana es nuestro día perfecto, ¿qué haríamos?", a: ["Desayuno abrazados 🥰", "Reír sin parar 😂", "Ver el atardecer juntos 🌅"] }
+];
+
+
+    let currentQ = 0;
+
+    function startQuiz() {
+      buttonsDiv.style.display = "none";
+      quizDiv.style.display = "block";
+      showQuestion();
+    }
+
+    function showQuestion() {
+      const q = questions[currentQ];
+      quizQuestion.textContent = q.q;
+      quizButtons.innerHTML = "";
+      q.a.forEach(ans => {
+        const btn = document.createElement("button");
+        btn.textContent = ans;
+        btn.onclick = nextQuestion;
+        quizButtons.appendChild(btn);
+      });
+    }
+
+    function nextQuestion() {
+      currentQ++;
+      if (currentQ < questions.length) {
+        showQuestion();
+      } else {
+        showFinal();
+      }
+    }
+
+    function showFinal() {
+      quizDiv.style.display = "none";
+      finalDiv.style.display = "block";
+      spawnHearts();
+    }
+
+    // corazones flotando
+    function spawnHearts() {
+      setInterval(() => {
+        const heart = document.createElement("div");
+        heart.classList.add("heart");
+        heart.innerHTML = "💖";
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.animationDuration = Math.random() * 2 + 3 + "s";
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 4000);
+      }, 300);
+    }
+  </script>
+</body>
+</html>
